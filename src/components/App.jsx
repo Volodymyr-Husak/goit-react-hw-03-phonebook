@@ -13,6 +13,19 @@ export class App extends Component {
     ],
     filter: '',
   };
+  componentDidMount = prevState => {
+    try {
+      const contactsWithLocalSt = localStorage.getItem('contacts');
+      return contactsWithLocalSt === null ? undefined : this.setState({ contacts: JSON.parse(contactsWithLocalSt)});
+    } catch (error) {
+      console.error('Get state error: ', error.message);
+    }
+  };
+  componentDidUpdate = prevState => {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  };
 
   handleOnInputChange = e => {
     const nameInput = e.currentTarget.name;
